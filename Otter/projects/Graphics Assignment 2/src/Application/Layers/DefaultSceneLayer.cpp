@@ -73,6 +73,8 @@
 #include "Application/Windows/DebugWindow.h"
 #include "Gameplay/Components/ShadowCamera.h"
 
+std::string lightNum;
+
 DefaultSceneLayer::DefaultSceneLayer() :
 	ApplicationLayer()
 {
@@ -286,7 +288,7 @@ void DefaultSceneLayer::_CreateScene()
 		Material::Sptr toonMaterial = ResourceManager::CreateAsset<Material>(celShader);
 		{
 			toonMaterial->Name = "Toon"; 
-			toonMaterial->Set("u_Material.AlbedoMap", boxTexture);
+			toonMaterial->Set("u_Material.AlbedoMap", ladybugTexture);
 			toonMaterial->Set("u_Material.NormalMap", normalMapDefault);
 			toonMaterial->Set("s_ToonTerm", toonLut);
 			toonMaterial->Set("u_Material.Shininess", 0.1f); 
@@ -411,8 +413,8 @@ void DefaultSceneLayer::_CreateScene()
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->MainCamera->GetGameObject()->SelfRef();
 		{
-			camera->SetPostion({ 0, 11.48, 6.290 });
-			camera->SetRotation({ 84.796, 0.0, -1.310 });
+			camera->SetPostion({ 0, 16.48, 6.290 });
+			camera->SetRotation({ 82, 0, -1.310 });
 			camera->LookAt(glm::vec3(0.0f));
 			camera->SetScale({ 0.8, 0.8, 0.8 });
 
@@ -477,7 +479,7 @@ void DefaultSceneLayer::_CreateScene()
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = ladybug->Add<RenderComponent>();
 			renderer->SetMesh(ladybugMesh);
-			renderer->SetMaterial(ladybugMaterial);
+			renderer->SetMaterial(toonMaterial);
 
 			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
 			TriggerVolume::Sptr trigger = ladybug->Add<TriggerVolume>();

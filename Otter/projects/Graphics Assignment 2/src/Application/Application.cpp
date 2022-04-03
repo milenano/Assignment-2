@@ -363,10 +363,6 @@ void Application::_Update() {
 			FTemp = glfwGetTime();
 		}
 
-		if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z > 7) {
-
-		}
-
 		if (FTime > 9) {
 			playerFlying = false;
 			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z > 1) {
@@ -383,6 +379,18 @@ void Application::_Update() {
 	}
 	else {
 		app.CurrentScene()->FindObjectByName("ladybug")->SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
+	}
+	if ((InputEngine::GetKeyState(GLFW_KEY_H) == ButtonState::Down)) {
+		for (int i = 0; i < app.CurrentScene()->FindObjectByName("Lights")->GetChildren().size(); i = i + 1) {
+			//app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->SetScale(glm::vec3(0.0f, 0.0f, 0.0f));
+			app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->SetPostion(glm::vec3(60000.0f, 0.0f, 0.0f));
+			//app.CurrentScene()->FindObjectByName("Lights")->Get<Light>()->SetIntensity(0.0f);
+		}
+	}
+	else {
+		for (int i = 0; i < app.CurrentScene()->FindObjectByName("Lights")->GetChildren().size(); i = i + 1) {
+			app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+		}
 	}
 }
 
