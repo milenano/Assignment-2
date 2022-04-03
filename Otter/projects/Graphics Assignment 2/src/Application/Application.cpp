@@ -333,7 +333,7 @@ void Application::_Update() {
 		std::cout << JTime << "\n";
 
 		//parabola function so the jump will slow as it reaches the max height
-		jumpheight = (-4 * pow(x - 1.5, 2) + 9) + 1; //0.2 is currently the ladybugs starting point on z
+		jumpheight = (-4 * pow(x - 1, 2) + 4) + 1; //0.2 is currently the ladybugs starting point on z
 
 		if (jumpheight < 0) { //so the ladybug doesnt go through the ground
 			jumpo = false;
@@ -352,7 +352,7 @@ void Application::_Update() {
 			FTime = glfwGetTime() - FTemp;
 			FTime = (FTime / 2.5) * 8;
 
-			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 10.1) {
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 6.1) {
 				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
 				app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().y, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z + 1));
 			}
@@ -380,16 +380,24 @@ void Application::_Update() {
 	else {
 		app.CurrentScene()->FindObjectByName("ladybug")->SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
 	}
+
+	//Light Toggle
 	if ((InputEngine::GetKeyState(GLFW_KEY_H) == ButtonState::Down)) {
 		for (int i = 0; i < app.CurrentScene()->FindObjectByName("Lights")->GetChildren().size(); i = i + 1) {
-			//app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->SetScale(glm::vec3(0.0f, 0.0f, 0.0f));
-			app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->SetPostion(glm::vec3(60000.0f, 0.0f, 0.0f));
-			//app.CurrentScene()->FindObjectByName("Lights")->Get<Light>()->SetIntensity(0.0f);
+			app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->Get<Light>()->SetIntensity(0.f);
 		}
 	}
 	else {
 		for (int i = 0; i < app.CurrentScene()->FindObjectByName("Lights")->GetChildren().size(); i = i + 1) {
-			app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->SetPostion(glm::vec3(0.0f, 0.0f, 0.0f));
+			if (i <= 10) {
+				app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->Get<Light>()->SetIntensity(250.f);
+			}
+			else if (i <= 21) {
+				app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->Get<Light>()->SetIntensity(500.f);
+			}
+			else if (i <= 30) {
+				app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->Get<Light>()->SetIntensity(1.f);
+			}
 		}
 	}
 }

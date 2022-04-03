@@ -472,14 +472,14 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr ladybug = scene->CreateGameObject("ladybug");
 		{
 			// Set position in the scene
-			ladybug->SetPostion(glm::vec3(6.f, 0.0f, 1.f));
+			ladybug->SetPostion(glm::vec3(6.f, 6.970f, 0.544f));
 			ladybug->SetRotation(glm::vec3(91.f, 0.0f, 124.000f));
 			ladybug->SetScale({ 0.3, 0.3, 0.3 });
 
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = ladybug->Add<RenderComponent>();
 			renderer->SetMesh(ladybugMesh);
-			renderer->SetMaterial(toonMaterial);
+			renderer->SetMaterial(ladybugMaterial);
 
 			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
 			TriggerVolume::Sptr trigger = ladybug->Add<TriggerVolume>();
