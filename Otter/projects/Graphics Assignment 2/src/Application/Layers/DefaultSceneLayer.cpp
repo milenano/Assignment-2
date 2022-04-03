@@ -134,6 +134,7 @@ void DefaultSceneLayer::_CreateScene()
 		});
 		celShader->SetDebugName("Cel Shader");
 
+	
 
 		// Load in the meshes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
@@ -361,15 +362,41 @@ void DefaultSceneLayer::_CreateScene()
 		// Create some lights for our scene
 		GameObject::Sptr lightParent = scene->CreateGameObject("Lights");
 
-		for (int ix = 0; ix < 50; ix++) {
-			GameObject::Sptr light = scene->CreateGameObject("Light");
-			light->SetPostion(glm::vec3(glm::diskRand(25.0f), 1.0f));
-			lightParent->AddChild(light);
+		for (int ix = 0; ix < 22; ix++) {
+			if (ix <= 10)
+			{
+				GameObject::Sptr light = scene->CreateGameObject("Light");
+				light->SetPostion(glm::vec3(-50.f * ix, 1.f, 40.0f));
+				lightParent->AddChild(light);
 
-			Light::Sptr lightComponent = light->Add<Light>();
-			lightComponent->SetColor(glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f)));
-			lightComponent->SetRadius(glm::linearRand(0.1f, 10.0f));
-			lightComponent->SetIntensity(glm::linearRand(1.0f, 2.0f));
+				Light::Sptr lightComponent = light->Add<Light>();
+				lightComponent->SetColor(glm::vec3(0.49f, 1.f, 0.32f));
+				lightComponent->SetRadius(5.f);
+				lightComponent->SetIntensity(250.f);
+			}
+			else if (ix <= 21)
+			{
+				GameObject::Sptr light = scene->CreateGameObject("Light");
+				light->SetPostion(glm::vec3(-50.f * (ix - 11), -90, 100.0f));
+				lightParent->AddChild(light);
+
+				Light::Sptr lightComponent = light->Add<Light>();
+				lightComponent->SetColor(glm::vec3(0.45f, 0.678f, 0.1872f));
+				lightComponent->SetRadius(30.f);
+				lightComponent->SetIntensity(500.f);
+			}
+			else if (ix <= 30)
+			{
+				GameObject::Sptr light = scene->CreateGameObject("Light");
+				light->SetPostion(glm::vec3(-50.f * (ix - 21), 20.f, 5.0f));
+				lightParent->AddChild(light);
+
+				Light::Sptr lightComponent = light->Add<Light>();
+				lightComponent->SetColor(glm::vec3(1.f, 1.f, 1.f));
+				lightComponent->SetRadius(5.f);
+				lightComponent->SetIntensity(1.f);
+			}
+			
 		}
 
 		// We'll create a mesh that is a simple plane that we can resize later
@@ -384,9 +411,10 @@ void DefaultSceneLayer::_CreateScene()
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->MainCamera->GetGameObject()->SelfRef();
 		{
-			camera->SetPostion({ -0.880, -12.560, 2.200 });
+			camera->SetPostion({ 0, 11.48, 6.290 });
 			camera->SetRotation({ 84.796, 0.0, -1.310 });
-			//camera->LookAt(glm::vec3(0.0f));
+			camera->LookAt(glm::vec3(0.0f));
+			camera->SetScale({ 0.8, 0.8, 0.8 });
 
 			camera->Add<SimpleCameraControl>();
 
@@ -400,9 +428,9 @@ void DefaultSceneLayer::_CreateScene()
 		// Set up all our sample objects
 		GameObject::Sptr plane = scene->CreateGameObject("Plane"); //2dbg
 		{
-			plane->SetPostion(glm::vec3(0.990f, 12.990f, 9.200f + 3.26f));
-			plane->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
-			plane->SetScale(glm::vec3(80.0f, 26.0f, 1.0f));
+			plane->SetPostion(glm::vec3(350.f, -130.f, 62.f));
+			plane->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			plane->SetScale(glm::vec3(375.0f, 125.0f, 250.0f));
 			// Make a big tiled mesh
 			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
 			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
@@ -418,10 +446,31 @@ void DefaultSceneLayer::_CreateScene()
 			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
 		}
 
+		// Set up all our sample objects
+		GameObject::Sptr plane2 = scene->CreateGameObject("Plane2"); //2dbg
+		{
+			plane2->SetPostion(glm::vec3(-50.f, -130.f, 62.f));
+			plane2->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			plane2->SetScale(glm::vec3(375.0f, 125.0f, 250.0f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane2->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane2->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
 		GameObject::Sptr ladybug = scene->CreateGameObject("ladybug");
 		{
 			// Set position in the scene
-			ladybug->SetPostion(glm::vec3(2.130f, -8.950f, -2.340f + 3.26f));
+			ladybug->SetPostion(glm::vec3(6.f, 0.0f, 1.f));
 			ladybug->SetRotation(glm::vec3(91.f, 0.0f, 124.000f));
 			ladybug->SetScale({ 0.3, 0.3, 0.3 });
 
@@ -441,8 +490,9 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr bg = scene->CreateGameObject("bg");
 		{
 			// Set position in the scene
-			bg->SetPostion(glm::vec3(0.0f, 0.0f, -0.640));
-			bg->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			bg->SetPostion(glm::vec3(107.7f, -55.830f, -1.7f));
+			bg->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg->SetScale(glm::vec3(6.f));
 
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = bg->Add<RenderComponent>();
@@ -459,8 +509,10 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr bg2 = scene->CreateGameObject("bg2");
 		{
 			// Set position in the scene
-			bg2->SetPostion(glm::vec3(-17.790f, 0.0f, -0.640));
-			bg2->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			// Set position in the scene
+			bg2->SetPostion(glm::vec3(0.f, -55.830f, -1.7f));
+			bg2->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg2->SetScale(glm::vec3(6.f));
 
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = bg2->Add<RenderComponent>();
@@ -477,8 +529,10 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr bg3 = scene->CreateGameObject("bg3");
 		{
 			// Set position in the scene
-			bg3->SetPostion(glm::vec3(17.850f, 0.0f, -0.640));
-			bg3->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			// Set position in the scene
+			bg3->SetPostion(glm::vec3(-107.7f, -55.830f, -1.7f));
+			bg3->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg3->SetScale(glm::vec3(6.f));
 
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = bg3->Add<RenderComponent>();
