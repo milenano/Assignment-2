@@ -7,7 +7,7 @@ OutlineEffect::OutlineEffect() :
 	PostProcessingLayer::Effect(),
 	_shader(nullptr),
 	_outlineColor(glm::vec4(0, 0, 0, 1)),
-	_scale(1.0f),
+	_scale(0.0f),
 	_depthThreshold(0.1f),
 	_normalThreshold(0.4f),
 	_depthNormalThreshold(0.4f),

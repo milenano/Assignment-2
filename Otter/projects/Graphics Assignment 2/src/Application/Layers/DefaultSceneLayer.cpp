@@ -469,25 +469,6 @@ void DefaultSceneLayer::_CreateScene()
 			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
 		}
 
-		GameObject::Sptr ladybug = scene->CreateGameObject("ladybug");
-		{
-			// Set position in the scene
-			ladybug->SetPostion(glm::vec3(6.f, 6.970f, 0.544f));
-			ladybug->SetRotation(glm::vec3(91.f, 0.0f, 124.000f));
-			ladybug->SetScale({ 0.3, 0.3, 0.3 });
-
-			// Create and attach a renderer for the monkey
-			RenderComponent::Sptr renderer = ladybug->Add<RenderComponent>();
-			renderer->SetMesh(ladybugMesh);
-			renderer->SetMaterial(ladybugMaterial);
-
-			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
-			TriggerVolume::Sptr trigger = ladybug->Add<TriggerVolume>();
-			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
-			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
-
-			ladybug->Add<TriggerVolumeEnterBehaviour>();
-		}
 
 		GameObject::Sptr bg = scene->CreateGameObject("bg");
 		{
@@ -547,6 +528,27 @@ void DefaultSceneLayer::_CreateScene()
 			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
 
 			bg3->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+
+		GameObject::Sptr ladybug = scene->CreateGameObject("ladybug");
+		{
+			// Set position in the scene
+			ladybug->SetPostion(glm::vec3(6.f, 6.970f, 0.544f));
+			ladybug->SetRotation(glm::vec3(91.f, 0.0f, 124.000f));
+			ladybug->SetScale({ 0.3, 0.3, 0.3 });
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = ladybug->Add<RenderComponent>();
+			renderer->SetMesh(ladybugMesh);
+			renderer->SetMaterial(ladybugMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = ladybug->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			ladybug->Add<TriggerVolumeEnterBehaviour>();
 		}
 
 		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");

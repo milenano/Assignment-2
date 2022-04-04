@@ -25,7 +25,7 @@ namespace Gameplay {
 
 		float Aperture   = 20.0f;
 		float LensDepth  = 0.5f;
-		float FocalDepth = 10.0f;
+		float FocalDepth = 5.0f;
 
 		virtual nlohmann::json ToJson() const override;
 		static Camera::Sptr FromJson(const nlohmann::json& data);

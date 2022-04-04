@@ -9,7 +9,7 @@ ColorCorrectionEffect::ColorCorrectionEffect() :
 ColorCorrectionEffect::ColorCorrectionEffect(bool defaultLut) :
 	PostProcessingLayer::Effect(),
 	_shader(nullptr),
-	_strength(1.0f),
+	_strength(0.4f),
 	Lut(nullptr)
 {
 	Name = "Color Correction";
