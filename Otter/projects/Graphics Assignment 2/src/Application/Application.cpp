@@ -382,7 +382,7 @@ void Application::_Update() {
 	}
 
 	//Light Toggle
-	if ((InputEngine::GetKeyState(GLFW_KEY_H) == ButtonState::Down)) {
+	if ((InputEngine::GetKeyState(GLFW_KEY_1) == ButtonState::Down)) {
 		for (int i = 0; i < app.CurrentScene()->FindObjectByName("Lights")->GetChildren().size(); i = i + 1) {
 			app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->Get<Light>()->SetIntensity(0.f);
 		}
