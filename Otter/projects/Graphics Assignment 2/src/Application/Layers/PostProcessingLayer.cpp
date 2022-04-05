@@ -4,6 +4,9 @@
 #include "RenderLayer.h"
 
 #include "PostProcessing/ColorCorrectionEffect.h"
+#include "PostProcessing/ColorCorrectionEffectcool.h"
+#include "PostProcessing/ColorCorrectionEffectnoir.h"
+#include "PostProcessing/ColorCorrectionEffectwarm.h"
 #include "PostProcessing/BoxFilter3x3.h"
 #include "PostProcessing/BoxFilter5x5.h"
 #include "PostProcessing/OutlineEffect.h"
@@ -30,7 +33,10 @@ void PostProcessingLayer::AddEffect(const Effect::Sptr& effect) {
 void PostProcessingLayer::OnAppLoad(const nlohmann::json& config)
 {
 	// Loads some effects in
-	_effects.push_back(std::make_shared<ColorCorrectionEffect>());
+	//_effects.push_back(std::make_shared<ColorCorrectionEffect>());
+	_effects.push_back(std::make_shared<ColorCorrectionEffectcool>());
+	_effects.push_back(std::make_shared<ColorCorrectionEffectnoir>());
+	_effects.push_back(std::make_shared<ColorCorrectionEffectwarm>());
 	_effects.push_back(std::make_shared<BoxFilter3x3>());
 	_effects.push_back(std::make_shared<BoxFilter5x5>());
 	_effects.push_back(std::make_shared<OutlineEffect>());
