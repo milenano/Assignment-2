@@ -451,7 +451,7 @@ void DefaultSceneLayer::_CreateScene()
 		// Set up all our sample objects
 		GameObject::Sptr plane2 = scene->CreateGameObject("Plane2"); //2dbg
 		{
-			plane2->SetPostion(glm::vec3(-50.f, -130.f, 62.f));
+			plane2->SetPostion(glm::vec3(0.f, -130.f, 62.f));
 			plane2->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
 			plane2->SetScale(glm::vec3(375.0f, 125.0f, 250.0f));
 			// Make a big tiled mesh
@@ -469,6 +469,47 @@ void DefaultSceneLayer::_CreateScene()
 			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
 		}
 
+		// Set up all our sample objects
+		GameObject::Sptr plane3 = scene->CreateGameObject("Plane3"); //2dbg
+		{
+			plane3->SetPostion(glm::vec3(-370.f, -130.f, 62.f));
+			plane3->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			plane3->SetScale(glm::vec3(375.0f, 125.0f, 250.0f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane3->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane3->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr plane4 = scene->CreateGameObject("Plane4"); //2dbg
+		{
+			plane4->SetPostion(glm::vec3(-700.f, -130.f, 62.f));
+			plane4->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			plane4->SetScale(glm::vec3(375.0f, 125.0f, 250.0f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = plane4->Add<RenderComponent>();
+			renderer->SetMesh(planeMesh);
+			renderer->SetMaterial(bgMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = plane4->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
 
 		GameObject::Sptr bg = scene->CreateGameObject("bg");
 		{
@@ -528,6 +569,90 @@ void DefaultSceneLayer::_CreateScene()
 			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
 
 			bg3->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr bg4 = scene->CreateGameObject("bg4");
+		{
+			// Set position in the scene
+			// Set position in the scene
+			bg4->SetPostion(glm::vec3(-214.6f, -55.830f, -1.7f));
+			bg4->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg4->SetScale(glm::vec3(6.f));
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = bg4->Add<RenderComponent>();
+			renderer->SetMesh(backgroundMesh);
+			renderer->SetMaterial(backgroundMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = bg4->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			bg4->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr bg5 = scene->CreateGameObject("bg5");
+		{
+			// Set position in the scene
+			// Set position in the scene
+			bg5->SetPostion(glm::vec3(-321.9f, -55.830f, -1.7f));
+			bg5->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg5->SetScale(glm::vec3(6.f));
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = bg5->Add<RenderComponent>();
+			renderer->SetMesh(backgroundMesh);
+			renderer->SetMaterial(backgroundMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = bg5->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			bg5->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr bg6 = scene->CreateGameObject("bg6");
+		{
+			// Set position in the scene
+			// Set position in the scene
+			bg6->SetPostion(glm::vec3(-429.2f, -55.830f, -1.7f));
+			bg6->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg6->SetScale(glm::vec3(6.f));
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = bg6->Add<RenderComponent>();
+			renderer->SetMesh(backgroundMesh);
+			renderer->SetMaterial(backgroundMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = bg6->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			bg6->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr bg7 = scene->CreateGameObject("bg7");
+		{
+			// Set position in the scene
+			// Set position in the scene
+			bg7->SetPostion(glm::vec3(-536.5f, -55.830f, -1.7f));
+			bg7->SetRotation(glm::vec3(90.f, 0.0f, -180.0f));
+			bg7->SetScale(glm::vec3(6.f));
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = bg7->Add<RenderComponent>();
+			renderer->SetMesh(backgroundMesh);
+			renderer->SetMaterial(backgroundMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = bg7->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			bg7->Add<TriggerVolumeEnterBehaviour>();
 		}
 
 
