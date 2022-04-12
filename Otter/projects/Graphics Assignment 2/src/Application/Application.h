@@ -156,4 +156,10 @@ protected:
 
 	static Application* _singleton;
 	static std::string  _applicationName;
+
+	bool paused = false;
+	bool playermove = false;
+	bool followplayer = true;
+	bool winner = false;
+	bool collision = false;
 };

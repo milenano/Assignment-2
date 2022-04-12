@@ -226,6 +226,8 @@ void Application::_Run()
 			_PostRender();
 		}
 
+		
+
 		// Store timing for next loop
 		lastFrame = thisFrame;
 
@@ -399,6 +401,62 @@ void Application::_Update() {
 				app.CurrentScene()->FindObjectByName("Lights")->GetChildren()[i]->Get<Light>()->SetIntensity(1.f);
 			}
 		}
+	}
+
+	if ((InputEngine::GetKeyState(GLFW_KEY_P) == ButtonState::Down)) {
+		if (paused == true)
+		{
+			paused = false;
+		}
+		else if (paused == false)
+		{
+			paused = true;
+		}
+	}
+
+	if (paused == true)
+	{
+		playermove = false;
+	}
+
+	if (paused == false)
+	{
+		playermove = true;
+	}
+
+	if (playermove == true)
+	{
+		app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x - 0.4f, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().y, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z));
+	}
+
+	if ((InputEngine::GetKeyState(GLFW_KEY_Y) == ButtonState::Down))
+	{
+		if (followplayer == true)
+		{
+			followplayer = false;
+		}
+		else if (followplayer == false)
+		{
+			followplayer = true;
+		}
+	}
+
+	if (app.CurrentScene()->FindObjectByName("ladybug") != nullptr && followplayer == true)
+	{
+		app.CurrentScene()->FindObjectByName("Main Camera")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x - 5, 11.480, 6.290));
+		app.CurrentScene()->FindObjectByName("Main Camera")->SetRotation(glm::vec3(84, 0, -180));
+	}
+
+	if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -406.f)
+	{
+		winner = true;
+	}
+
+	if (winner == true)
+	{
+		paused = true;
+		app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(0.f, 0.f, 0.f));
+		winner = false;
 	}
 }
 

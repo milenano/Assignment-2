@@ -141,11 +141,20 @@ void DefaultSceneLayer::_CreateScene()
 		// Load in the meshes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 		MeshResource::Sptr shipMesh   = ResourceManager::CreateAsset<MeshResource>("fenrir.obj");
+		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
+		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
+		MeshResource::Sptr MushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
+		MeshResource::Sptr ExitMesh = ResourceManager::CreateAsset<MeshResource>("ExitTree.obj");
+
 
 		//Our Meshes
 		Texture2D::Sptr    backgroundTexture = ResourceManager::CreateAsset<Texture2D>("textures/BackgroundUV.png");
 		Texture2D::Sptr    dbackgroundTexture = ResourceManager::CreateAsset<Texture2D>("textures/bg.png");
 		Texture2D::Sptr    ladybugTexture = ResourceManager::CreateAsset<Texture2D>("textures/LadybugUV.png");
+		Texture2D::Sptr	   BmTex = ResourceManager::CreateAsset<Texture2D>("textures/bmuv.png");
+		Texture2D::Sptr    MushroomTex = ResourceManager::CreateAsset<Texture2D>("textures/MushroomUV.png");
+		Texture2D::Sptr    TmTex = ResourceManager::CreateAsset<Texture2D>("textures/tmuv.png");
+		Texture2D::Sptr    ExitTex = ResourceManager::CreateAsset<Texture2D>("textures/ExitTreeUV.png");
 
 		// Load in some textures
 		Texture2D::Sptr    boxTexture   = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
@@ -244,12 +253,47 @@ void DefaultSceneLayer::_CreateScene()
 			backgroundMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
 
+		// This will be the reflective material, we'll make the whole thing 90% reflective
+		Material::Sptr TMMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
+		{
+			TMMaterial->Name = "Tall Mushroom";
+			TMMaterial->Set("u_Material.AlbedoMap", TmTex);
+			TMMaterial->Set("u_Material.NormalMap", normalMapDefault);
+			TMMaterial->Set("u_Material.Shininess", 0.5f);
+		}
+
+		// This will be the reflective material, we'll make the whole thing 90% reflective
+		Material::Sptr BMMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
+		{
+			BMMaterial->Name = "Beeg Mushroom";
+			BMMaterial->Set("u_Material.AlbedoMap", BmTex);
+			BMMaterial->Set("u_Material.NormalMap", normalMapDefault);
+			BMMaterial->Set("u_Material.Shininess", 0.5f);
+		}
+
+		// This will be the reflective material, we'll make the whole thing 90% reflective
+		Material::Sptr MushroomMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
+		{
+			MushroomMaterial->Name = "Tall Mushroom";
+			MushroomMaterial->Set("u_Material.AlbedoMap", MushroomTex);
+			MushroomMaterial->Set("u_Material.NormalMap", normalMapDefault);
+			MushroomMaterial->Set("u_Material.Shininess", 0.5f);
+		}
+
 		Material::Sptr bgMaterial = ResourceManager::CreateAsset<Material>(deferredForward); //2d background
 		{
 			bgMaterial->Name = "planebg";
 			bgMaterial->Set("u_Material.AlbedoMap", dbackgroundTexture);
 			bgMaterial->Set("u_Material.Shininess", 0.1f);
 			bgMaterial->Set("u_Material.NormalMap", normalMapDefault);
+		}
+
+		Material::Sptr ExitMaterial = ResourceManager::CreateAsset<Material>(deferredForward); //2d background
+		{
+			ExitMaterial->Name = "ExitTree";
+			ExitMaterial->Set("u_Material.AlbedoMap", ExitTex);
+			ExitMaterial->Set("u_Material.Shininess", 0.1f);
+			ExitMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
 
 		Material::Sptr ladybugMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
@@ -413,8 +457,8 @@ void DefaultSceneLayer::_CreateScene()
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->MainCamera->GetGameObject()->SelfRef();
 		{
-			camera->SetPostion({ 0, 16.48, 6.290 });
-			camera->SetRotation({ 82, 0, -1.310 });
+			camera->SetPostion({ 0, 6.8, 2 });
+			camera->SetRotation({ 90, 0, -180 });
 			camera->LookAt(glm::vec3(0.0f));
 			camera->SetScale({ 0.8, 0.8, 0.8 });
 
@@ -424,6 +468,174 @@ void DefaultSceneLayer::_CreateScene()
 			//Camera::Sptr cam = camera->Add<Camera>();
 			// Make sure that the camera is set as the scene's main camera!
 			//scene->MainCamera = cam;
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom1 = scene->CreateGameObject("Mushroom1"); //2dbg
+		{
+			Mushroom1->SetPostion(glm::vec3(-50.f, 0.f, -0.66f));
+			Mushroom1->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom1->SetScale(glm::vec3(0.5f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom1->Add<RenderComponent>();
+			renderer->SetMesh(MushroomMesh);
+			renderer->SetMaterial(MushroomMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom1->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom2 = scene->CreateGameObject("Mushroom2"); //2dbg
+		{
+			Mushroom2->SetPostion(glm::vec3(-100.f, 0.f, -0.66f));
+			Mushroom2->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom2->SetScale(glm::vec3(0.5f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom2->Add<RenderComponent>();
+			renderer->SetMesh(MushroomMesh);
+			renderer->SetMaterial(MushroomMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom2->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom3 = scene->CreateGameObject("Mushroom3"); //2dbg
+		{
+			Mushroom3->SetPostion(glm::vec3(-150.f, 0.f, -0.66f));
+			Mushroom3->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom3->SetScale(glm::vec3(1.f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom3->Add<RenderComponent>();
+			renderer->SetMesh(tmMesh);
+			renderer->SetMaterial(TMMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom3->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom4 = scene->CreateGameObject("Mushroom4"); //2dbg
+		{
+			Mushroom4->SetPostion(glm::vec3(-200.f, 0.f, -0.66f));
+			Mushroom4->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom4->SetScale(glm::vec3(1.f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom4->Add<RenderComponent>();
+			renderer->SetMesh(bmMesh);
+			renderer->SetMaterial(BMMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom4->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom5 = scene->CreateGameObject("Mushroom5"); //2dbg
+		{
+			Mushroom5->SetPostion(glm::vec3(-250.f, 0.f, -0.66f));
+			Mushroom5->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom5->SetScale(glm::vec3(0.5f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom5->Add<RenderComponent>();
+			renderer->SetMesh(MushroomMesh);
+			renderer->SetMaterial(MushroomMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom5->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom6 = scene->CreateGameObject("Mushroom6"); //2dbg
+		{
+			Mushroom6->SetPostion(glm::vec3(-280.f, 0.f, -0.66f));
+			Mushroom6->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom6->SetScale(glm::vec3(0.5f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom6->Add<RenderComponent>();
+			renderer->SetMesh(MushroomMesh);
+			renderer->SetMaterial(MushroomMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom6->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom7 = scene->CreateGameObject("Mushroom7"); //2dbg
+		{
+			Mushroom7->SetPostion(glm::vec3(-310.f, 0.f, -0.66f));
+			Mushroom7->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom7->SetScale(glm::vec3(0.5f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom7->Add<RenderComponent>();
+			renderer->SetMesh(MushroomMesh);
+			renderer->SetMaterial(MushroomMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom7->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
+		}
+
+		// Set up all our sample objects
+		GameObject::Sptr Mushroom8 = scene->CreateGameObject("Mushroom8"); //2dbg
+		{
+			Mushroom8->SetPostion(glm::vec3(-350.f, 0.f, -0.66f));
+			Mushroom8->SetRotation(glm::vec3(90.f, 0.0f, 0.0f));
+			Mushroom8->SetScale(glm::vec3(1.f));
+			// Make a big tiled mesh
+			MeshResource::Sptr tiledMesh = ResourceManager::CreateAsset<MeshResource>();
+			tiledMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(100.0f), glm::vec2(20.0f)));
+			tiledMesh->GenerateMesh();
+
+			// Create and attach a RenderComponent to the object to draw our mesh
+			RenderComponent::Sptr renderer = Mushroom8->Add<RenderComponent>();
+			renderer->SetMesh(bmMesh);
+			renderer->SetMaterial(BMMaterial);
+
+			// Attach a plane collider that extends infinitely along the X/Y axis
+			RigidBody::Sptr physics = Mushroom8->Add<RigidBody>(/*static by default*/);
+			physics->AddCollider(BoxCollider::Create(glm::vec3(50.0f, 50.0f, 1.0f)))->SetPosition({ 0,0,-1 });
 		}
 
 
@@ -655,13 +867,34 @@ void DefaultSceneLayer::_CreateScene()
 			bg7->Add<TriggerVolumeEnterBehaviour>();
 		}
 
+		GameObject::Sptr Exit = scene->CreateGameObject("Exit");
+		{
+			// Set position in the scene
+			// Set position in the scene
+			Exit->SetPostion(glm::vec3(-409.5f, -3.38f, -0.34f));
+			Exit->SetRotation(glm::vec3(90.f, 0.0f, 140.0f));
+			Exit->SetScale(glm::vec3(3.f));
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = Exit->Add<RenderComponent>();
+			renderer->SetMesh(ExitMesh);
+			renderer->SetMaterial(ExitMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = Exit->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			Exit->Add<TriggerVolumeEnterBehaviour>();
+		}
+
 
 		GameObject::Sptr ladybug = scene->CreateGameObject("ladybug");
 		{
 			// Set position in the scene
-			ladybug->SetPostion(glm::vec3(6.f, 6.970f, 0.544f));
-			ladybug->SetRotation(glm::vec3(91.f, 0.0f, 124.000f));
-			ladybug->SetScale({ 0.3, 0.3, 0.3 });
+			ladybug->SetPostion(glm::vec3(6.f, 0.0f, 1.f));
+			ladybug->SetRotation(glm::vec3(90.f, 0.0f, 90.000f));
+			ladybug->SetScale({ 0.5f, 0.5f, 0.5f });
 
 			// Create and attach a renderer for the monkey
 			RenderComponent::Sptr renderer = ladybug->Add<RenderComponent>();
