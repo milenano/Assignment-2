@@ -140,7 +140,6 @@ void DefaultSceneLayer::_CreateScene()
 
 		// Load in the meshes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
-		MeshResource::Sptr shipMesh   = ResourceManager::CreateAsset<MeshResource>("fenrir.obj");
 		MeshResource::Sptr bmMesh = ResourceManager::CreateAsset<MeshResource>("bm.obj");
 		MeshResource::Sptr tmMesh = ResourceManager::CreateAsset<MeshResource>("tm.obj");
 		MeshResource::Sptr MushroomMesh = ResourceManager::CreateAsset<MeshResource>("Mushroom.obj");
@@ -929,18 +928,6 @@ void DefaultSceneLayer::_CreateScene()
 			deadbug->Add<TriggerVolumeEnterBehaviour>();
 		}
 
-		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
-		{
-			// Set position in the scene
-			ship->SetPostion(glm::vec3(1.5f, 0.0f, 4.0f));
-			ship->SetScale(glm::vec3(0.1f));
-
-			// Create and attach a renderer for the monkey
-			RenderComponent::Sptr renderer = ship->Add<RenderComponent>();
-			renderer->SetMesh(shipMesh);
-			renderer->SetMaterial(grey);
-		}
-
 		GameObject::Sptr demoBase = scene->CreateGameObject("Demo Parent");
 
 		GameObject::Sptr shadowCaster = scene->CreateGameObject("Shadow Light");
@@ -993,7 +980,9 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr particles = scene->CreateGameObject("Particles");
 		{
 			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();  
-			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(0.0f, -1.0f, 10.0f), 10.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)); 
+			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(0.0f, -1.0f, 5.0f), 10.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.1); 
+			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(-1.0f, 0.0f, 5.0f), 1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.25);
+			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(1.0f, 1.0f, 5.0f), 3.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.175);
 		}
 
 		GuiBatcher::SetDefaultTexture(ResourceManager::CreateAsset<Texture2D>("textures/ui-sprite.png"));

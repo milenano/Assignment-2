@@ -462,7 +462,7 @@ void Application::_Update() {
 	if (collision == true)
 	{
 		paused = true;
-		app.CurrentScene()->FindObjectByName("deadbug")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().y, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z));
+		app.CurrentScene()->FindObjectByName("deadbug")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().y + 2, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z));
 		app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(0.f, 0.f, 0.f));
 		collision = false;
 	}
