@@ -354,7 +354,7 @@ void Application::_Update() {
 			FTime = glfwGetTime() - FTemp;
 			FTime = (FTime / 2.5) * 8;
 
-			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 6.1) {
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 10.1) {
 				//scene->FindObjectByName("player")->SetPostion(glm::vec3(scene->FindObjectByName("player")->GetPosition().x, scene->FindObjectByName("player")->GetPosition().y, (scene->FindObjectByName("player")->GetPosition().z) + 1.0));
 				app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().y, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z + 1));
 			}
@@ -458,6 +458,79 @@ void Application::_Update() {
 		app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(0.f, 0.f, 0.f));
 		winner = false;
 	}
+
+	if (collision == true)
+	{
+		paused = true;
+		app.CurrentScene()->FindObjectByName("deadbug")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().y, app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z));
+		app.CurrentScene()->FindObjectByName("ladybug")->SetPostion(glm::vec3(0.f, 0.f, 0.f));
+		collision = false;
+	}
+
+	app.CurrentScene()->FindObjectByName("Particles")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("deadbug")->GetPosition().x, app.CurrentScene()->FindObjectByName("deadbug")->GetPosition().y, app.CurrentScene()->FindObjectByName("deadbug")->GetPosition().z));
+
+	app.CurrentScene()->FindObjectByName("Shadow Light")->SetPostion(glm::vec3(app.CurrentScene()->FindObjectByName("Main Camera")->GetPosition().x - 15, app.CurrentScene()->FindObjectByName("Main Camera")->GetPosition().y, app.CurrentScene()->FindObjectByName("Main Camera")->GetPosition().z + 15));
+
+	if (playerlose == false)
+	{
+		if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 1.56)
+		{
+			//mushroom 1
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -49.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -50.41)
+			{
+				collision = true;
+			}
+
+			//mushroom 2
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -99.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -100.41)
+			{
+				collision = true;
+			}
+
+			//mushroom 5
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -249.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -250.41)
+			{
+				collision = true;
+			}
+
+			//mushroom 6
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -279.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -280.41)
+			{
+				collision = true;
+			}
+
+			//mushroom 7
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -309.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -310.41)
+			{
+				collision = true;
+			}
+		}
+
+		if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 3.5)
+		{
+			//mushroom 3
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -149.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -150.41)
+			{
+				collision = true;
+			}
+		}
+
+		if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().z < 4)
+		{
+			//mushroom 4
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -199.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -200.41)
+			{
+				collision = true;
+			}
+
+			//mushroom 8
+			if (app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x < -349.66f && app.CurrentScene()->FindObjectByName("ladybug")->GetPosition().x > -350.41)
+			{
+				collision = true;
+			}
+		}
+	}
+
 }
 
 void Application::_LateUpdate() {

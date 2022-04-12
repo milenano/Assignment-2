@@ -909,6 +909,26 @@ void DefaultSceneLayer::_CreateScene()
 			ladybug->Add<TriggerVolumeEnterBehaviour>();
 		}
 
+		GameObject::Sptr deadbug = scene->CreateGameObject("deadbug");
+		{
+			// Set position in the scene
+			deadbug->SetPostion(glm::vec3(100.f, 0.0f, 1.f));
+			deadbug->SetRotation(glm::vec3(-90.f, 0.0f, 90.000f));
+			deadbug->SetScale({ 0.3f, 0.3f, 0.3f });
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = deadbug->Add<RenderComponent>();
+			renderer->SetMesh(ladybugMesh);
+			renderer->SetMaterial(ladybugMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = deadbug->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			deadbug->Add<TriggerVolumeEnterBehaviour>();
+		}
+
 		GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
 		{
 			// Set position in the scene
@@ -926,8 +946,8 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr shadowCaster = scene->CreateGameObject("Shadow Light");
 		{
 			// Set position in the scene
-			shadowCaster->SetPostion(glm::vec3(3.0f, 3.0f, 5.0f));
-			shadowCaster->LookAt(glm::vec3(0.0f));
+			shadowCaster->SetPostion(glm::vec3(-5.8f, 11.4f, 20.0f));
+			shadowCaster->SetRotation(glm::vec3(-60.f, 0.f, 0.f));
 
 			// Create and attach a renderer for the monkey
 			ShadowCamera::Sptr shadowCam = shadowCaster->Add<ShadowCamera>();
@@ -973,7 +993,7 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr particles = scene->CreateGameObject("Particles");
 		{
 			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();  
-			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(0.0f, -1.0f, 10.0f), 10.0f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)); 
+			particleManager->AddEmitter(glm::vec3(0.0f), glm::vec3(0.0f, -1.0f, 10.0f), 10.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)); 
 		}
 
 		GuiBatcher::SetDefaultTexture(ResourceManager::CreateAsset<Texture2D>("textures/ui-sprite.png"));

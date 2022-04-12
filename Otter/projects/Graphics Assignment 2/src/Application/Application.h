@@ -162,4 +162,5 @@ protected:
 	bool followplayer = true;
 	bool winner = false;
 	bool collision = false;
+	bool playerlose = false;
 };
